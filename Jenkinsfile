@@ -24,14 +24,13 @@ pipeline {
             }
         }
 
-        stage ('Testing'){
-            parallel{
+        stage ('Testing'){            parallel{
                 stage ( 'Static Analysis'){
                     steps {
                         sh mvn 'checkstyle:checkstyle'
 
-                        def checkstyle = scanForIssues tool: [$class: 'CheckStyle'], pattern: '**/target/checkstyle-result.xml'
-                        publishIssues issues:[checkstyle]
+                        //def checkstyle = scanForIssues tool: [$class: 'CheckStyle'], pattern: '**/target/checkstyle-result.xml'
+                        //publishIssues issues:[checkstyle]
                     }
                 }
 
@@ -41,12 +40,13 @@ pipeline {
                     }
                 }
             }
-
-            stage ("Deploy to Production"){
-                steps {
-                    sh "scp -i ${params.ssh_key} **/target/*.war ubuntu@${params.tomcat_prod}:/var/lib/tomcat9/webapps"
-                }
+        }
+        
+        stage ("Deploy to Production"){
+            steps {
+                sh "scp -i ${params.ssh_key} **/target/*.war ubuntu@${params.tomcat_prod}:/var/lib/tomcat9/webapps"
             }
+        }
 
         }
     }
