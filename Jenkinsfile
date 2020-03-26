@@ -41,14 +41,13 @@ pipeline {
                 }
             }
         }
-        
+
         stage ("Deploy to Production"){
             steps {
                 sh "scp -i ${params.ssh_key} **/target/*.war ubuntu@${params.tomcat_prod}:/var/lib/tomcat9/webapps"
             }
         }
 
-        }
     }
 }
 
