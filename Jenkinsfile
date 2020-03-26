@@ -29,9 +29,11 @@ pipeline {
                 stage ( 'Static Analysis'){
                     steps {
                         sh 'mvn checkstyle:checkstyle'
-
-                        //def checkstyle = scanForIssues tool: [$class: 'CheckStyle'], pattern: '**/target/checkstyle-result.xml'
-                        publishIssues issues:[checkstyle]
+                    }
+                    post {
+                        always {
+                            recordIssues enabledForFailure: true, tool: checkStyle()
+                        }
                     }
                 }
 
