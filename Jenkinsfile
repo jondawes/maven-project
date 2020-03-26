@@ -24,7 +24,8 @@ pipeline {
             }
         }
 
-        stage ('Testing'){            parallel{
+        stage ('Testing'){            
+            parallel{
                 stage ( 'Static Analysis'){
                     steps {
                         sh mvn 'checkstyle:checkstyle'
