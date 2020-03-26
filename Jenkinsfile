@@ -30,7 +30,7 @@ pipeline {
                     steps {
                         sh 'mvn checkstyle:checkstyle'
 
-                        def checkstyle = scanForIssues tool: [$class: 'CheckStyle'], pattern: '**/target/checkstyle-result.xml'
+                        //def checkstyle = scanForIssues tool: [$class: 'CheckStyle'], pattern: '**/target/checkstyle-result.xml'
                         publishIssues issues:[checkstyle]
                     }
                 }
