@@ -6,26 +6,28 @@ pipeline {
     }
 
     stages{
-        parallel {
-            stage('Build'){
-                steps {
-                    sh 'mvn clean package'
-                    sh "docker build . -t tomcatwebapp:${env.BUILD_ID}"
-                } //end steps
-            }  // end Build
+        stage('Testing') {
+            parallel {
+                stage('Build'){
+                    steps {
+                        sh 'mvn clean package'
+                        sh "docker build . -t tomcatwebapp:${env.BUILD_ID}"
+                    } //end steps
+                }  // end stage Build
 
-            stage ( 'Static Analysis'){
-                steps {
-                    sh 'mvn checkstyle:checkstyle'
-                }
-                post {
-                    always {
-                        recordIssues enabledForFailure: true, tool: checkStyle()
+                stage ( 'Static Analysis'){
+                    steps {
+                        sh 'mvn checkstyle:checkstyle'
                     }
-                }
-            }  //end Stage
+                    post {
+                        always {
+                            recordIssues enabledForFailure: true, tool: checkStyle()
+                        }
+                    }
+                }  //end Stage static analysis
 
-        } // end parallel
+            } // end parallel
+        } // end stage testing
 
         stage('Run'){
             steps {
